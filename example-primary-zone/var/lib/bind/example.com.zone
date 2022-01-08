@@ -1,0 +1,29 @@
+$TTL 600    ; 10 minutes
+@	        IN SOA    ns.example.com. domainadmin.example.com. (
+                2022010801 ; serial
+                14400      ; refresh (4 hours)
+                900        ; retry (15 minutes)
+                604800     ; expire (1 week)
+                3600       ; minimum (1 hour)
+                )
+
+; NAMSERVER
+@                IN    NS    ns.example.com.
+
+; MAILSERVER
+@                IN    MX    10 mail01.example.com.
+@                IN    MX    20 mail02.example.com.
+
+; A
+@                IN    A    1.2.3.1
+ns               IN    A    1.2.3.2
+web01            IN    A    1.2.3.3
+mail01           IN    A    1.2.3.4
+mail02           IN    A    1.2.3.5
+
+; CNAME
+www           	 IN    CNAME    web01
+wiki             IN    CNAME    web01
+
+; TXT
+@            	 IN    TXT        "v=spf1 mx ~all"
