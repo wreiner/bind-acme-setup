@@ -1,9 +1,9 @@
 # Bind Acme Setup
 
-To use the Let's Encrypt DNS challange a TXT record in your zone needs to be set upon certificate generation.
+To use the Let's Encrypt DNS challenge a TXT record in your zone needs to be set upon certificate generation.
 This is especially interesting for wildcard certificates.
 
-The provided script adds a _acme-challange.your.domain zone and configures it to be dynamically updateable with Let's Encrypt certbot (for examle with [certbot-dns-rfc2136](https://certbot-dns-rfc2136.readthedocs.io/en/stable/)) through the use of TSIG keys.
+The provided script adds a _acme-challenge.your.domain zone and configures it to be dynamically updateable with Let's Encrypt certbot (for examle with [certbot-dns-rfc2136](https://certbot-dns-rfc2136.readthedocs.io/en/stable/)) through the use of TSIG keys.
 
 Also provided is an example primary zone setup which can be used with the script.
 
