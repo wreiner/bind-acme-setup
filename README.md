@@ -76,6 +76,52 @@ debian:/var/lib/bind# nsupdate -k /etc/bind/letsencrypt_keys/example.com.certbot
 > quit
 ```
 
+## Test obtaining a certificate with certbot
+
+Let's Encrypt offers a specific Docker image which can be used to obtain certficates using the DNS challenge with bind - [certbot/dns-rfc2136](https://hub.docker.com/r/certbot/dns-rfc2136/).
+
+To test obtaining a certificate the staging servers of Let's Encrypt can be used:
+
+* Create the config
+    ```
+    $ cat <<EOF > /var/lib/docker/volumes/certbottest/etc/example.com-rfc2136.ini
+    # Target DNS server (IPv4 or IPv6 address, not a hostname)
+    dns_rfc2136_server = 1.2.3.4
+    # Target DNS port
+    dns_rfc2136_port = 53
+    # TSIG key name (created above)
+    dns_rfc2136_name = example.com-certbot-key.
+    # TSIG key secret (created above, secret field of the .key file)
+    dns_rfc2136_secret = yBFtfmuWadcS2pEntWKaOfcMWIXGoOWOObusidSfn5quOp/MFDnohuviIydYltZHje/WJghYgc2imk4Y6STmw==
+    # TSIG key algorithm
+    dns_rfc2136_algorithm = HMAC-SHA512
+    EOF
+
+    $ sudo chmod 600 /var/lib/docker/volumes/certbottest/etc/example.com-rfc2136.ini
+    ```
+* Obtain a staging certificate
+    ```
+    $ docker run -it --rm --name testcertbot \
+        -v "/var/lib/docker/volumes/certbottest/etc:/etc/letsencrypt" \
+        -v "/var/lib/docker/volumes/certbottest/data:/var/lib/letsencrypt" \
+        certbot/dns-rfc2136:latest \
+        certonly \
+        -n \
+        --email hostmaster\@example.com \
+        --agree-tos \
+        --no-eff-email \
+        --test-cert \
+        --debug \
+        --dns-rfc2136 \
+        --dns-rfc2136-credentials /etc/letsencrypt/example.com-rfc2136.ini \
+        --dns-rfc2136-propagation-seconds 30 \
+        -d "*.example.com"
+    ```
+* Check the obtained certificate (look for "Issuer: C = US, O = (STAGING) Let's Encrypt, CN = (STAGING) Artificial Apricot R3")
+    ```
+    $ openssl x509 -in /var/lib/docker/volumes/certbottest/etc/archive/example.com/fullchain1.pem -text -noout
+    ```
+
 ## Sync dynamic changes to the zone file
 
 Dynamic changes are stored in _.jnl_-files.
