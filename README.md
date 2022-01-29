@@ -122,10 +122,10 @@ To test obtaining a certificate the staging servers of Let's Encrypt can be used
     $ openssl x509 -in /var/lib/docker/volumes/certbottest/etc/archive/example.com/fullchain1.pem -text -noout
     ```
 
-## Use the python script to update the zone file
+## Use the python script to update the zone
 
 Communication between the update client (certbot, nsupdate, ..) and the DNS server is unencrypted.
-For DNS update authentication the TSIG protocol is used. It uses shared secret between server and client and a one-way hashing function which both parties calculate to ensure the authenticity and integrity of the update request without the secret to be transmitted over the network itself. This is a very crude explanation, see RFC 2845 for a more detailed explaination.
+For DNS update authentication the TSIG protocol is used. It uses a shared secret between server and client and a one-way hashing function which both parties calculate to ensure the authenticity and integrity of the update request without the secret to be transmitted over the network itself. This is a very crude explanation, see RFC 2845 for a more detailed explaination.
 
 To run the script create a config file with the zone configuration - an example file is included in the repository.
 Provide the zone to update and the challenge from certbot as command line parameters:
@@ -136,6 +136,14 @@ python3 update-txt-record.py -z example.com -c the_challange_string [-C update-t
 
 The script expects the config file to be at _/etc/update-txt-records.json_.
 If the location is different provide the config file with the -C command line option.
+
+## Use Ansible to update the zone
+
+It is also possible to use Ansible to update the record. An example can be found in the repository.
+
+```
+ansible-playbook -i 10.0.0.1, -u ansible update-play.yml
+```
 
 ## Sync dynamic changes to the zone file
 

@@ -1,0 +1,31 @@
+---
+# Run with
+#   ansible-playbook -i 10.0.0.1, -u ansible update-play.yml
+
+- name: "Update TXT record with ACME challenge"
+  gather_facts: false
+  hosts: all
+
+  tasks:
+    - name: "Install python packages"
+      become: true
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - python3-dns
+        - python3-dnslib
+
+    - name: "Add ACME challange"
+      # delegate_to: 127.0.0.1
+      community.general.nsupdate:
+        key_name: "example.com-certbot-key."
+        key_secret: "VaSDI8jrl1TQ/eIDhct47/s7D8XS6hOb6iWtLggMH1AP99WyXvjv6Jc4Shr5IVtwbWQXJHY0CV+e4joLdGcylw=="
+        key_algorithm: "hmac-sha512"
+        server: "10.0.0.1"
+        record: "_acme-challenge.example.com."
+        type: "TXT"
+        ttl: 600
+        value: "challenge-text"
+        zone: "_acme-challenge.example.com"
+        state: present
