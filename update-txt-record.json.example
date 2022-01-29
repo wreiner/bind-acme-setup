@@ -1,0 +1,12 @@
+{
+    "example.com": {
+        "secret": "VaSDI8jrl1TQ/eIDhct47/s7D8XS6hOb6iWtLggMH1AP99WyXvjv6Jc4Shr5IVtwbWQXJHY0CV+e4joLdGcylw==",
+        "keyname": "example.com-certbot-key.",
+        "dnsserver": "10.0.0.1"
+    },
+    "example2.com": {
+        "secret": "UfXDI7jrl1TQ/eIDhct47/s7D8XS6hOb6iWtLggMH1AP99WyXvjv6Jc4Shr5IVtwbWQXJHY0CV+e4joLdGcylw==",
+        "keyname": "example2.com-certbot-key.",
+        "dnsserver": "10.0.10.1"
+    }
+}
