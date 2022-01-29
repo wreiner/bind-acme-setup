@@ -125,10 +125,7 @@ To test obtaining a certificate the staging servers of Let's Encrypt can be used
 ## Use the python script to update the zone file
 
 Communication between the update client (certbot, nsupdate, ..) and the DNS server is unencrypted.
-It is therefore a security hazard to communicate the challange as attackers could gain access to the secret to update the token
-and start issuing malicious certificates.
-
-The provided script can be run on the DNS server system itself so the network traffic is not leaving the host.
+For DNS update authentication the TSIG protocol is used. It uses shared secret between server and client and a one-way hashing function which both parties calculate to ensure the authenticity and integrity of the update request without the secret to be transmitted over the network itself. This is a very crude explanation, see RFC 2845 for a more detailed explaination.
 
 To run the script create a config file with the zone configuration - an example file is included in the repository.
 Provide the zone to update and the challenge from certbot as command line parameters:
