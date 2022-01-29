@@ -122,6 +122,24 @@ To test obtaining a certificate the staging servers of Let's Encrypt can be used
     $ openssl x509 -in /var/lib/docker/volumes/certbottest/etc/archive/example.com/fullchain1.pem -text -noout
     ```
 
+## Use the python script to update the zone file
+
+Communication between the update client (certbot, nsupdate, ..) and the DNS server is unencrypted.
+It is therefore a security hazard to communicate the challange as attackers could gain access to the secret to update the token
+and start issuing malicious certificates.
+
+The provided script can be run on the DNS server system itself so the network traffic is not leaving the host.
+
+To run the script create a config file with the zone configuration - an example file is included in the repository.
+Provide the zone to update and the challenge from certbot as command line parameters:
+
+```
+python3 update-txt-record.py -z example.com -c the_challange_string [-C update-txt-record.json]
+```
+
+The script expects the config file to be at _/etc/update-txt-records.json_.
+If the location is different provide the config file with the -C command line option.
+
 ## Sync dynamic changes to the zone file
 
 Dynamic changes are stored in _.jnl_-files.
